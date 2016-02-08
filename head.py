@@ -1,4 +1,5 @@
-import dicom
+#import dicom
+import pydicom as dicom
 import os
 import numpy
 from matplotlib import pyplot, cm
@@ -31,5 +32,21 @@ for filenameDCM in lstFilesDCM:
 pyplot.figure(dpi=300)
 pyplot.axes().set_aspect('equal', 'datalim')
 pyplot.set_cmap(pyplot.gray())
-pyplot.pcolormesh(x, y, numpy.flipud(ArrayDicom[:, :, 80]))
+pyplot.pcolormesh(x, y, numpy.flipud(ArrayDicom[:, :, 80])) # Note that just the slice 80 is shown here !!!! To verify this point, just change the variable sliceNumber below to 80
+
+# Retrieving some information and Testing what happens when we try to show just one slice
+sliceNumber = 3 # any integer between 0 and len(lstFilesDCM)
+imageSlice = dicom.read_file( lstFilesDCM[ sliceNumber ] )
+print('======================')
+print('Number of bits per pixel: ')
+print('Method 1: ', imageSlice.pixel_array.dtype )
+print('Method 2: ', imageSlice.BitsAllocated)
+print('Thus, 16 bits/pixel' )
+print('======================')
+print('Testing what happens when we try to show just one slice (file) dcm')
+pyplot.figure()
+pyplot.imshow( imageSlice.pixel_array, cmap = 'bone')
+print('Image is displayed correctly !!!')
+print('======================')
+
 pyplot.show()
